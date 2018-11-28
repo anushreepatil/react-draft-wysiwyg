@@ -26,6 +26,9 @@ class LayoutComponent extends Component {
     height: this.props.config.defaultSize.height,
     width: this.props.config.defaultSize.width,
     alt: '',
+    caption: '',
+    isDecorative: false,
+    imgLink: ''
   };
 
   componentWillReceiveProps(props: Object): void {
@@ -38,6 +41,9 @@ class LayoutComponent extends Component {
         height: this.props.config.defaultSize.height,
         width: this.props.config.defaultSize.width,
         alt: '',
+        caption: '',
+        isDecorative: false,
+        imgLink: ''
       });
     } else if (props.config.uploadCallback !== this.props.config.uploadCallback ||
       props.config.uploadEnabled !== this.props.config.uploadEnabled) {
@@ -87,7 +93,7 @@ class LayoutComponent extends Component {
   };
 
   addImageFromState: Function = (): void => {
-    const { imgSrc, alt } = this.state;
+    const { imgSrc, alt, caption, isDecorative, imgLink } = this.state;
     let { height, width } = this.state;
     const { onChange } = this.props;
     if (!isNaN(height)) {
@@ -96,7 +102,7 @@ class LayoutComponent extends Component {
     if (!isNaN(width)) {
       width += 'px';
     }
-    onChange(imgSrc, height, width, alt);
+    onChange(imgSrc, height, width, alt, caption, isDecorative, imgLink);
   };
 
   showImageURLOption: Function = (): void => {
@@ -114,8 +120,15 @@ class LayoutComponent extends Component {
 
   updateValue: Function = (event: Object): void => {
     this.setState({
-      [`${event.target.name}`]: event.target.value,
+      [`${event.target.name}`]: event.target.value
     });
+  };
+
+  updateCheckboxValue: Function = (event: Object): void => {
+    this.setState({
+      [`${event.target.name}`]: event.target.checked
+    });
+
   };
 
   selectImage: Function = (event: Object): void => {
@@ -166,6 +179,9 @@ class LayoutComponent extends Component {
       height,
       width,
       alt,
+      caption,
+      isDecorative,
+      imgLink
     } = this.state;
     const {
       config: {
@@ -175,7 +191,7 @@ class LayoutComponent extends Component {
         urlEnabled,
         previewImage,
         inputAccept,
-        alt: altConf,
+        alt: altConf
       },
       doCollapse,
       translations,
@@ -270,6 +286,42 @@ class LayoutComponent extends Component {
           />
           <span className="rdw-image-mandatory-sign">{altConf.mandatory && '*'}</span>
         </div>}
+        <div className="rdw-image-modal-size">
+          <span className="rdw-image-modal-alt-lbl">Figure Caption</span>
+          <input
+            onChange={this.updateValue}
+            onBlur={this.updateValue}
+            value={caption}
+            name="caption"
+            className="rdw-image-modal-alt-input"
+            placeholder="caption"
+          />
+          <span className="rdw-image-mandatory-sign">{altConf.mandatory && '*'}</span>
+        </div>
+         <div className="rdw-image-modal-size">
+          <span className="rdw-image-modal-alt-lbl">Link to</span>
+          <input
+            onChange={this.updateValue}
+            onBlur={this.updateValue}
+            value={imgLink}
+            name="imgLink"
+            className="rdw-image-modal-alt-input"
+            placeholder="Add link"
+          />
+          <span className="rdw-image-mandatory-sign">{altConf.mandatory && '*'}</span>
+        </div>
+        <div className="rdw-image-modal-size">
+          <span className="rdw-image-modal-alt-lbl">Is Decorative</span>
+          <input
+            id="isDecorative"
+            type="checkbox"
+            onChange={this.updateCheckboxValue}
+            onBlur={this.updateCheckboxValue}
+            name="isDecorative"
+            className="rdw-image-modal-alt-input"
+          />
+          <span className="rdw-image-mandatory-sign">{altConf.mandatory && '*'}</span>
+        </div>
         <div className="rdw-image-modal-size">
           &#8597;&nbsp;
           <input
